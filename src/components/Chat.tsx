@@ -6,6 +6,7 @@ import { MessageBubble } from './MessageBubble'
 import { DateDivider } from './DateDivider'
 import { SettingsDialog } from './SettingsDialog'
 import { Message } from '../lib/supabase'
+import { UI_STRINGS } from '../lib/constants'
 
 export const Chat: React.FC = () => {
   const [inputMessage, setInputMessage] = useState('')
@@ -47,7 +48,7 @@ export const Chat: React.FC = () => {
   }
 
   const handleClearChat = async () => {
-    if (window.confirm('Weet je zeker dat je alle berichten wilt verwijderen?')) {
+    if (window.confirm(UI_STRINGS.clearChatConfirm)) {
       await clearMessages()
       setShowMenu(false)
     }
@@ -67,12 +68,12 @@ export const Chat: React.FC = () => {
     <div className="chat-container">
       {/* Header */}
       <div className="chat-header">
-        <h1>Chat</h1>
+        <h1>{UI_STRINGS.headerTitle}</h1>
         <div className="header-actions">
           <button
             className="icon-button"
             onClick={() => setShowSettings(true)}
-            title="Settings"
+            title={UI_STRINGS.settingsTitle}
           >
             <Settings size={24} />
           </button>
@@ -80,7 +81,7 @@ export const Chat: React.FC = () => {
             <button
               className="icon-button"
               onClick={() => setShowMenu(!showMenu)}
-              title="More"
+              title={UI_STRINGS.settingsMore}
             >
               <MoreVertical size={24} />
             </button>
@@ -88,7 +89,7 @@ export const Chat: React.FC = () => {
               <div className="dropdown-menu">
                 <button onClick={handleClearChat}>
                   <Trash2 size={18} />
-                  <span>Chat wissen</span>
+                  <span>{UI_STRINGS.clearChatLabel}</span>
                 </button>
               </div>
             )}
@@ -99,11 +100,11 @@ export const Chat: React.FC = () => {
       {/* Messages */}
       <div className="messages-container">
         {loading ? (
-          <div className="loading">Laden...</div>
+          <div className="loading">{UI_STRINGS.loading}</div>
         ) : messages.length === 0 ? (
           <div className="empty-state">
-            <p>Nog geen berichten</p>
-            <p className="empty-subtitle">Start een gesprek!</p>
+            <p>{UI_STRINGS.emptyStateTitle}</p>
+            <p className="empty-subtitle">{UI_STRINGS.emptyStateSubtitle}</p>
           </div>
         ) : (
           <>
@@ -126,7 +127,7 @@ export const Chat: React.FC = () => {
           type="text"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type een bericht..."
+          placeholder={UI_STRINGS.inputPlaceholder}
           className="chat-input"
         />
         <button

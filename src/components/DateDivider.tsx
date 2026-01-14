@@ -1,4 +1,5 @@
 import React from 'react'
+import { DATE_LABELS, DEFAULT_LOCALE } from '../lib/constants'
 
 interface DateDividerProps {
   date: Date
@@ -12,11 +13,11 @@ export const DateDivider: React.FC<DateDividerProps> = ({ date }) => {
   let dateText: string
 
   if (date.toDateString() === today.toDateString()) {
-    dateText = 'Vandaag'
+    dateText = DATE_LABELS.today
   } else if (date.toDateString() === yesterday.toDateString()) {
-    dateText = 'Gisteren'
+    dateText = DATE_LABELS.yesterday
   } else {
-    dateText = date.toLocaleDateString('nl-NL', {
+    dateText = date.toLocaleDateString(DEFAULT_LOCALE, {
       day: 'numeric',
       month: 'long',
       year: 'numeric'

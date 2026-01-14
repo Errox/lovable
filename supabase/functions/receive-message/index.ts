@@ -13,11 +13,13 @@ serve(async (req) => {
   }
 
   try {
-    const { message } = await req.json()
+    const body = await req.json()
+    const { message } = body
 
-    if (!message) {
+    // Validate input
+    if (!message || typeof message !== 'string' || message.trim().length === 0) {
       return new Response(
-        JSON.stringify({ error: 'Message is required' }),
+        JSON.stringify({ error: 'Valid message content is required (non-empty string)' }),
         { 
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }

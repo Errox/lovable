@@ -1,5 +1,6 @@
 import React from 'react'
 import { Message } from '../lib/supabase'
+import { DEFAULT_LOCALE } from '../lib/constants'
 
 interface MessageBubbleProps {
   message: Message
@@ -7,7 +8,7 @@ interface MessageBubbleProps {
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   const isOutgoing = message.direction === 'outgoing'
-  const time = new Date(message.created_at).toLocaleTimeString('nl-NL', {
+  const time = new Date(message.created_at).toLocaleTimeString(DEFAULT_LOCALE, {
     hour: '2-digit',
     minute: '2-digit'
   })

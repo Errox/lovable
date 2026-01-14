@@ -99,6 +99,14 @@ export const useMessages = () => {
     if (!conversationId) return
 
     try {
+      // Validate environment variables
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+      if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Missing Supabase configuration. Please check your environment variables.')
+      }
+
       // Insert message with pending status
       const { data: message, error } = await supabase
         .from('messages')
@@ -114,12 +122,12 @@ export const useMessages = () => {
       if (error) throw error
 
       // Call edge function to send to n8n
-      const functionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-message`
+      const functionUrl = `${supabaseUrl}/functions/v1/send-message`
       const response = await fetch(functionUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+          'Authorization': `Bearer ${supabaseAnonKey}`
         },
         body: JSON.stringify({
           message_id: message.id,

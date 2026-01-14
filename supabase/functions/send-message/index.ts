@@ -13,7 +13,29 @@ serve(async (req) => {
   }
 
   try {
-    const { message_id, content, n8n_endpoint } = await req.json()
+    const body = await req.json()
+    const { message_id, content, n8n_endpoint } = body
+
+    // Validate input
+    if (!content || typeof content !== 'string' || content.trim().length === 0) {
+      return new Response(
+        JSON.stringify({ error: 'Valid message content is required' }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
+
+    if (message_id && typeof message_id !== 'string') {
+      return new Response(
+        JSON.stringify({ error: 'Invalid message_id format' }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
 
     // Get Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
